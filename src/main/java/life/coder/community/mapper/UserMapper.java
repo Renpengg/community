@@ -16,4 +16,5 @@ public interface UserMapper {
 
     @Select("SELECT * FROM USER WHERE token = #{token}")
     User findByToken(@Param("token") String token);
+    //这里findByToken是一个方法，接收token参数，返回一个user对象，方法就是注解中的select
 }
