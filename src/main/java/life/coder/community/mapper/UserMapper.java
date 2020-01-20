@@ -1,10 +1,7 @@
 package life.coder.community.mapper;
 
 import life.coder.community.model.User;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -17,7 +14,12 @@ public interface UserMapper {
     @Select("SELECT * FROM USER WHERE token = #{token}")
     User findByToken(@Param("token") String token);//这里findByToken是一个方法，接收token参数，返回一个user对象，方法就是注解中的select
 
-    @Select("SELECT * FROM USER WHERE id = #{id}")
-    User findById(@Param("id") Integer creator);
+    @Select("SELECT * FROM USER WHERE id = #{creator}")
+    User findById(@Param("creator") Integer creator);
 
+    @Select("SELECT * FROM USER WHERE account_id = #{accountId}")
+    User findByAccountId(@Param(value = "accountId") String accountId);
+
+    @Update("UPDATE USER SET NAME = #{name}, TOKEN = #{token}, GMT_MODIFIED = #{gmtModified}, AVATAR_URL = #{avatarUrl} WHERE id = #{id}")
+    void update(User dbUser);
 }

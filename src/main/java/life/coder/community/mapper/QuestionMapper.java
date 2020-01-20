@@ -1,6 +1,7 @@
 package life.coder.community.mapper;
 
 
+import life.coder.community.dto.QuestionDTO;
 import life.coder.community.model.Question;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
@@ -13,6 +14,7 @@ import java.util.List;
 @Repository
 @Mapper
 public interface QuestionMapper {
+
 
     @Insert("INSERT INTO question (title, description, gmt_create, gmt_modified, creator, tag) VALUES(#{title},#{description},#{gmtCreate},#{gmtModified},#{creator},#{tag})")
     void create(Question question);
@@ -28,4 +30,7 @@ public interface QuestionMapper {
 
     @Select("SELECT count(1) FROM question WHERE creator = #{id}")
     Integer countByUserId(@Param(value = "id") Integer id);
+
+    @Select("SELECT * FROM question WHERE id = #{id}")
+    Question getById(@Param(value = "id") Integer id);
 }
