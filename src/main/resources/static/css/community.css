@@ -35,3 +35,16 @@ body{
 .jumbotron{
     margin: 50px;
 }
+
+.user-name{
+    padding-top: 10px;
+}
+
+.comment{
+    margin: 10px 0;
+}
+
+.btn-comment{
+    margin: 10px 0px;
+    float: right;
+}
