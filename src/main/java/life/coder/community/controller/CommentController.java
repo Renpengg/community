@@ -1,9 +1,8 @@
 package life.coder.community.controller;
 
-import life.coder.community.dto.CommentDTO;
+import life.coder.community.dto.CommentCreateDTO;
 import life.coder.community.dto.ResultDTO;
 import life.coder.community.exception.CustomizeErrorCode;
-import life.coder.community.exception.CustomizeException;
 import life.coder.community.mapper.CommentMapper;
 import life.coder.community.mapper.QuestionMapper;
 import life.coder.community.model.Comment;
@@ -33,7 +32,7 @@ public class CommentController {
 
     @ResponseBody
     @RequestMapping(value = "/comment", method = RequestMethod.POST)
-    public Object post(@RequestBody CommentDTO commentDTO,
+    public Object post(@RequestBody CommentCreateDTO commentDTO,
                        HttpServletRequest request){
         HttpSession session = request.getSession();
         User user = (User)session.getAttribute("user");
