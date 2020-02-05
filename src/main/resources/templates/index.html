@@ -10,6 +10,16 @@
     <script src="js/bootstrap.min.js"></script>
 </head>
 <body>
+<!--在用户未登录状态下点击回复后，关掉登录页面回到回复页面-->
+<script type="application/javascript">
+    window.onload = function(){
+        var close = window.localStorage.getItem("closable");
+        if(close == "true"){
+            window.close();
+            window.localStorage.removeItem("closable");
+        }
+    }
+</script>
 <div th:insert="~{navigation :: nav}"></div>
 <div class="container-fluid main">
     <div class="row body">
