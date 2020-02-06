@@ -2,6 +2,7 @@ package life.coder.community.controller;
 
 import life.coder.community.dto.CommentDTO;
 import life.coder.community.dto.QuestionDTO;
+import life.coder.community.enums.CommentTypeEnum;
 import life.coder.community.service.CommentService;
 import life.coder.community.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +28,7 @@ public class QuestionController {
         QuestionDTO questionDTO = questionService.getById(id);
 
         //获取回复列表
-        List<CommentDTO> commentDTO =  commentService.listByQuestionId(id);
+        List<CommentDTO> commentDTO =  commentService.listByTargetId(id, CommentTypeEnum.QUESTION);
 
         //累加阅读数
         questionService.incView(id);
