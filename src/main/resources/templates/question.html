@@ -24,7 +24,20 @@
                 阅读数：<span th:text="${question.viewCount}"></span>
                 </span>
                 <hr class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+
+                <!--内容  -->
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" th:text="${question.description}"></div>
+
+                <!--标签  -->
+                <hr class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <span class="label label-info question-tag" th:each="tag : ${question.getTag().split(',')}">
+                        <span class="glyphicon glyphicon-tags"></span>
+                        <span class="label label-info" th:text="${tag}"></span>
+                    </span>
+                </div>
+
+                <!--编辑-->
                 <hr class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 <a th:href="@{'/publish/'+${question.id}}" th:if="${session.user != null && session.user.id == question.creator}">
                     <span class="glyphicon glyphicon-pencil community-menu" aria-hidden="true">
@@ -103,7 +116,12 @@
                 </div>
             </div>
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                <h3>相关问题</h3>
+                <h4>相关问题</h4>
+                <ul>
+                    <li th:each="relatedQuestion : ${relatedQuestions}">
+                        <a th:href="@{'/question/'+ ${relatedQuestion.id}}" th:text="${relatedQuestion.title}"></a>
+                    </li>
+                </ul>
             </div>
         </div>
     </div>

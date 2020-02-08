@@ -41,7 +41,6 @@ function comment2Target(id, content, type){
 function post() {
     var questionId = $("#question_id").val();
     var commentContent = $("#comment_content").val();
-
     comment2Target(questionId, commentContent, 1);
 }
 
@@ -115,6 +114,30 @@ function collapseComments(e) {
             comments.addClass("in");
             e.setAttribute("data-collapse", "collapse");
             e.classList.add("active");
+        }
+    }
+}
+
+/**
+ *控制显示选择标签
+ **/
+
+function showSelectTag() {
+    $("#select-tag").show();
+}
+
+/**
+ *选择标签
+ **/
+function selectTag(e){
+    var value = e.getAttribute("data-tag");
+    var previous = $("#tag").val();
+
+    if(previous.indexOf(value) == -1){
+        if(previous){
+            $("#tag").val(previous + "," + value);
+        }else{
+            $("#tag").val(value);
         }
     }
 }
