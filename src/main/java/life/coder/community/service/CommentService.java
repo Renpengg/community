@@ -2,6 +2,8 @@ package life.coder.community.service;
 
 import life.coder.community.dto.CommentDTO;
 import life.coder.community.enums.CommentTypeEnum;
+import life.coder.community.enums.NotificationStatusEnum;
+import life.coder.community.enums.NotificationTypeEnum;
 import life.coder.community.exception.CustomizeErrorCode;
 import life.coder.community.exception.CustomizeException;
 import life.coder.community.mapper.*;
@@ -35,8 +37,11 @@ public class CommentService {
     @Autowired
     private CommentExtMapper commentExtMapper;
 
+    @Autowired
+    private NotificationMapper notificationMapper;
+
     @Transactional
-    public void insert(Comment comment) {
+    public void insert(Comment comment, User user) {
         if (comment.getParentId() == null || comment.getParentId() == 0) {
             throw new CustomizeException(CustomizeErrorCode.TARGET_PARAM_NOT_FOUND);
         }
@@ -59,6 +64,12 @@ public class CommentService {
             parentComment.setCommentCount(1);
             commentExtMapper.incCommentCount(parentComment);
 
+            //创建通知
+            Question question = questionMapper.selectByPrimaryKey(dbComment.getParentId());
+            if(question == null){
+                throw new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND);
+            }
+            createNotify(comment, dbComment.getCommentator(), user.getName(), question.getTitle(), NotificationTypeEnum.REPLY_QUESTION, question.getId());
         }else{
             //回复问题
             Question dbQuestion = questionMapper.selectByPrimaryKey(comment.getParentId());
@@ -68,7 +79,24 @@ public class CommentService {
             commentMapper.insert(comment);
             dbQuestion.setCommentCount(1);
             questionExtMapper.incCommentCount(dbQuestion);
+
+            //创建通知
+            createNotify(comment, dbQuestion.getCreator(), user.getName(), dbQuestion.getTitle(), NotificationTypeEnum.REPLY_COMMENT, dbQuestion.getId());
         }
+    }
+
+    private void createNotify(Comment comment, Long receiver, String notifierName, String outerTitle, NotificationTypeEnum notificationTypeEnum, Long outerid) {
+        Notification notification = new Notification();
+        notification.setGmtCreate(System.currentTimeMillis());
+        notification.setNotifier(comment.getCommentator());
+        notification.setNotifierName(notifierName);
+        notification.setType(notificationTypeEnum.getType());
+        notification.setOuterid(comment.getParentId());
+        notification.setReceiver(receiver);
+        notification.setStatus(NotificationStatusEnum.UNREAD.getStatus());
+        notification.setOuterTitle(outerTitle);
+        notification.setOuterid(outerid);
+        notificationMapper.insert(notification);
     }
 
     public List<CommentDTO> listByTargetId(Long id, CommentTypeEnum type) {

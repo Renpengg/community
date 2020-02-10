@@ -54,7 +54,7 @@ public class CommentController {
         comment.setType(commentDTO.getType());
         comment.setLikeCount(0l);
         comment.setCommentCount(0);
-        commentService.insert(comment);
+        commentService.insert(comment, user);
         return ResultDTO.okOf();
     }
 
